@@ -1,4 +1,6 @@
-class Api::V1::BoardsController < ApplicationController
+# frozen_string_literal: true
+
+class Api::V1::BoardsController < ApiController
   before_action :set_board, only: [:show, :update, :destroy]
 
   # GET /boards
@@ -39,14 +41,13 @@ class Api::V1::BoardsController < ApplicationController
   end
 
   private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_board
+      @board = Board.find(params[:id])
+    end
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_board
-    @board = Board.find(params[:id])
-  end
-
-  # Only allow a list of trusted parameters through.
-  def board_params
-    params.require(:board).permit(:name)
-  end
+    # Only allow a list of trusted parameters through.
+    def board_params
+      params.require(:board).permit(:name)
+    end
 end

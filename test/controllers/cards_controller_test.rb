@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class CardsControllerTest < ActionDispatch::IntegrationTest
@@ -11,7 +13,7 @@ class CardsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create card" do
-    assert_difference('Card.count') do
+    assert_difference("Card.count") do
       post cards_url, params: { card: { list_id: @card.list_id, name: @card.name, position: @card.position } }, as: :json
     end
 
@@ -29,7 +31,7 @@ class CardsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy card" do
-    assert_difference('Card.count', -1) do
+    assert_difference("Card.count", -1) do
       delete card_url(@card), as: :json
     end
 

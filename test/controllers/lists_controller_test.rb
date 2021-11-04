@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class ListsControllerTest < ActionDispatch::IntegrationTest
@@ -11,7 +13,7 @@ class ListsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create list" do
-    assert_difference('List.count') do
+    assert_difference("List.count") do
       post lists_url, params: { list: { board_id: @list.board_id, name: @list.name, position: @list.position } }, as: :json
     end
 
@@ -29,7 +31,7 @@ class ListsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy list" do
-    assert_difference('List.count', -1) do
+    assert_difference("List.count", -1) do
       delete list_url(@list), as: :json
     end
 

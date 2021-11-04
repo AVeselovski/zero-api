@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "boot"
 
 require "rails"
@@ -23,6 +25,12 @@ module ZeroApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
+
+    excluded_routes = ->(env) { !env["PATH_INFO"].match(%r{^/api}) }
+    config.middleware.use OliveBranch::Middleware,
+                          inflection:       "camel",
+                          exclude_params:   excluded_routes,
+                          exclude_response: excluded_routes
 
     # Configuration for the application, engines, and railties goes here.
     #

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class BoardsControllerTest < ActionDispatch::IntegrationTest
@@ -11,7 +13,7 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create board" do
-    assert_difference('Board.count') do
+    assert_difference("Board.count") do
       post boards_url, params: { board: { name: @board.name } }, as: :json
     end
 
@@ -29,7 +31,7 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy board" do
-    assert_difference('Board.count', -1) do
+    assert_difference("Board.count", -1) do
       delete board_url(@board), as: :json
     end
 

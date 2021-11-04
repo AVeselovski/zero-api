@@ -1,6 +1,8 @@
-class Api::V1::ListsController < ApplicationController
+# frozen_string_literal: true
+
+class Api::V1::ListsController < ApiController
   before_action :set_board
-  before_action :set_list, only: [:show, :update, :destroy]
+  before_action :set_list, only: [:show, :update, :destroy, :move]
 
   # GET /boards/1/lists
   def index
@@ -39,18 +41,24 @@ class Api::V1::ListsController < ApplicationController
     @list.destroy
   end
 
+  def move
+    # acts_as_list method
+    @list.insert_at(list_params[:position].to_i)
+
+    render json: @list
+  end
+
   private
+    def set_board
+      @board = Board.find(params[:board_id])
+    end
 
-  def set_board
-    @board = Board.find(params[:board_id])
-  end
+    def set_list
+      @list = List.find(params[:id])
+    end
 
-  def set_list
-    @list = List.find(params[:id])
-  end
-
-  # Only allow a list of trusted parameters through.
-  def list_params
-    params.require(:list).permit(:name, :position, :board_id)
-  end
+    # Only allow a list of trusted parameters through.
+    def list_params
+      params.require(:list).permit(:name, :position, :board_id)
+    end
 end

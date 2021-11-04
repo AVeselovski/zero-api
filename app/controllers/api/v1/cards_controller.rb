@@ -1,6 +1,8 @@
-class Api::V1::CardsController < ApplicationController
+# frozen_string_literal: true
+
+class Api::V1::CardsController < ApiController
   before_action :set_list
-  before_action :set_card, only: [:show, :update, :destroy]
+  before_action :set_card, only: [:show, :update, :destroy, :move]
 
   # GET .../1/lists/1/cards
   def index
@@ -39,18 +41,24 @@ class Api::V1::CardsController < ApplicationController
     @card.destroy
   end
 
+  # PATCH .../1/lists/1/cards/1/move
+  def move
+    @card.update(card_params)
+
+    render json: @card
+  end
+
   private
+    def set_list
+      @list = List.find(params[:list_id])
+    end
 
-  def set_list
-    @list = List.find(params[:list_id])
-  end
+    def set_card
+      @card = @list.cards.find(params[:id])
+    end
 
-  def set_card
-    @card = @list.cards.find(params[:id])
-  end
-
-  # Only allow a list of trusted parameters through.
-  def card_params
-    params.require(:card).permit(:name, :position, :list_id)
-  end
+    # Only allow a list of trusted parameters through.
+    def card_params
+      params.require(:card).permit(:name, :position, :list_id)
+    end
 end
