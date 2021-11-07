@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Api::V1::CardsController < ApiController
+  before_action do
+    require_board_user(params[:board_id])
+  end
   before_action :set_list
   before_action :set_card, only: [:show, :update, :destroy, :move]
 

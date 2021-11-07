@@ -7,6 +7,11 @@ Rails.application.routes.draw do
       post "auth/register", to: "authentication#create_user"
 
       resources :boards do
+        member do
+          put :add_user
+          delete :remove_user
+        end
+
         resources :lists do
           member do
             patch :move

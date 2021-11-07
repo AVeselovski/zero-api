@@ -6,6 +6,12 @@ class ApiController < ApplicationController
   # skip_before_action :verify_authenticity_token
   before_action :authenticate_token!
 
+  def require_board_user(board_id)
+    _board = current_user.boards.find(board_id)
+  rescue ActiveRecord::RecordNotFound
+    render json: { errors: ["No access!"] }, status: :forbidden
+  end
+
   private
     def authenticate_token!
       payload = JsonWebToken.decode(auth_token)

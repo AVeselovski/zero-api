@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Api::V1::ListsController < ApiController
+  before_action do
+    require_board_user(params[:board_id])
+  end
   before_action :set_board
   before_action :set_list, only: [:show, :update, :destroy, :move]
 
@@ -50,7 +53,7 @@ class Api::V1::ListsController < ApiController
 
   private
     def set_board
-      @board = Board.find(params[:board_id])
+      @board = current_user.boards.find(params[:board_id])
     end
 
     def set_list
