@@ -33,7 +33,7 @@ class Api::V1::AuthenticationController < ApiController
 
     user = User.new(user_params)
     if user.save
-      render json: { token: JsonWebToken.encode(sub: user.id) }, status: :ok
+      render json: { token: JsonWebToken.encode(sub: user.id) }, status: :created
     else
       render json: { errors: ["Something went wrong!"] }, status: :bad_request
     end

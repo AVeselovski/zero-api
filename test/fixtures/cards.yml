@@ -1,11 +1,36 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
+1:
+  name: Card 1
   position: 1
-  list: one
+  list: jane_board_list_1
 
-two:
-  name: MyString
+2:
+  name: Card 2
+  position: 2
+  list: jane_board_list_1
+
+3:
+  name: Card 3
   position: 1
-  list: two
+  list: jane_board_list_2
+
+4:
+  name: Card 1
+  position: 1
+  list: john_board_list_1
+
+5:
+  name: Card 2
+  position: 2
+  list: john_board_list_1
+
+6:
+  name: Card 1
+  position: 1
+  list: common_board_list_1
+
+7:
+  name: Card 2
+  position: 2
+  list: common_board_list_1
