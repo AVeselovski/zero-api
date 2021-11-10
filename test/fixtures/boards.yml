@@ -2,12 +2,9 @@
 
 jane_board:
   name: Jane's board
-  owner_id: 1
 
 john_board:
   name: John's board
-  owner_id: 2
 
 common_board:
   name: Common board
-  owner_id: 1

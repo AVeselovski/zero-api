@@ -73,4 +73,92 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response 403
   end
+
+  test "should add users to board" do
+    put add_user_api_v1_board_path(@board),
+        params: { user_id: users(:user_john).id },
+        headers: { authorization: @auth },
+        as: :json
+
+    assert @board.users.count == 2
+    assert_response 201
+  end
+
+  test "should not add already added users to board" do
+    put add_user_api_v1_board_path(boards(:common_board)),
+        params: { user_id: users(:user_john).id },
+        headers: { authorization: @auth },
+        as: :json
+
+    assert boards(:common_board).users.count == 2
+    assert_response 422
+  end
+
+  test "should not add users to board if not board owner" do
+    token = get_token(users(:user_john))
+    auth = "Bearer #{token}"
+    new_user = User.new({
+      email: "test-o-man@test.com",
+      username: "Test-o-Man",
+      password: "password",
+      password_confirmation: "password"
+    })
+    new_user.save
+
+    put add_user_api_v1_board_path(boards(:common_board)),
+        params: { user_id: new_user.id },
+        headers: { authorization: auth },
+        as: :json
+
+    assert @board.users.count == 1
+    assert_response 403
+  end
+
+  test "should remove users from board" do
+    delete remove_user_api_v1_board_path(boards(:common_board)),
+           params: { user_id: users(:user_john).id },
+           headers: { authorization: @auth },
+           as: :json
+
+    assert @board.users.count == 1
+    assert_response 200
+  end
+
+  test "should not remove users from board if not board owner" do
+    token = get_token(users(:user_john))
+    auth = "Bearer #{token}"
+
+    delete remove_user_api_v1_board_path(boards(:common_board)),
+           params: { user_id: users(:user_jane).id },
+           headers: { authorization: auth },
+           as: :json
+
+    assert boards(:common_board).users.count == 2
+    assert_response 403
+  end
+
+  test "should not remove the only user from board" do
+    delete remove_user_api_v1_board_path(@board),
+           params: { user_id: users(:user_jane).id },
+           headers: { authorization: @auth },
+           as: :json
+
+    assert @board.users.count == 1
+    assert_response 422
+  end
+
+  test "should transfer ownership when owner removed" do
+    delete remove_user_api_v1_board_path(boards(:common_board)),
+           params: { user_id: users(:user_jane).id },
+           headers: { authorization: @auth },
+           as: :json
+
+    json_response = JSON.parse(response.body)
+
+    assert boards(:common_board).users.count == 1
+    assert json_response["ownerId"] == users(:user_john).id
+    assert_response 200
+  end
 end
+
+# json_response = JSON.parse(response.body)

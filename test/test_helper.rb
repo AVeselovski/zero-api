@@ -26,6 +26,13 @@ class ActiveSupport::TestCase
     user_john = users(:user_john)
     user_john.boards << boards(:john_board)
     user_john.boards << boards(:common_board)
+    boards(:jane_board).owner_id = user_jane.id
+    boards(:jane_board).save
+    boards(:john_board).owner_id = user_john.id
+    boards(:john_board).save
+    boards(:common_board).owner_id = user_jane.id
+    boards(:common_board).save
+
   end
 
   def get_token(user)
