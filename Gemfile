@@ -7,8 +7,6 @@ ruby "2.7.1"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem "rails", "~> 6.1.3", ">= 6.1.3.1"
-# Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.4"
 # Use Puma as the app server
 gem "puma", "~> 5.0"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -41,6 +39,8 @@ group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
   # Pretty Rails console output
   gem "hirb", "~> 0.7.3"
+  # Use sqlite3 as the database for Active Record
+  gem "sqlite3", "~> 1.4"
 end
 
 group :development do
@@ -50,7 +50,12 @@ group :development do
 end
 
 group :test do
-  gem 'simplecov'
+  gem "simplecov"
+end
+
+group :production do
+  # Use Postgres as the database for Active Record
+  gem "pg"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
