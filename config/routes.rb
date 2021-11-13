@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  apipie
   namespace :api do
     namespace :v1 do
       post "auth/login", to: "authentication#create_token"

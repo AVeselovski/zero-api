@@ -25,8 +25,6 @@ class ApiController < ApplicationController
     rescue JWT::ExpiredSignature
       render json: { errors: ["Expired token!"] }, status: :unauthorized
     rescue JWT::DecodeError
-      puts "DECODE_ERROR"
-      puts ENV["JWT_SECRET_KEY"]
       render json: { errors: ["Invalid authentication token!"] }, status: :unauthorized
     end
 

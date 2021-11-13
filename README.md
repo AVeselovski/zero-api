@@ -21,3 +21,7 @@ Second terminal window:
 ## Tests
 
 This project uses Rails default `Minitest` for testing. Run tests with `rails test`.
+
+## Dev notes
+
+Heroku instance cannot read `Rails.application.secrets.secret_key_base` due to reasons. Using manual secret keys instead ([this commit](https://github.com/AVeselovski/zero-api/commit/6f767fe5b49510d4c31dc09be0f94b92ec6909b3)).

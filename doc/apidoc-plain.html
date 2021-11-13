@@ -1,0 +1,554 @@
+  <h4><a href='#authentication'>Authentication</a></h4>
+  <ul>
+      <li><a href='#authentication-create_token'>create_token</a></li>
+      <li><a href='#authentication-create_user'>create_user</a></li>
+  </ul>
+  <h4><a href='#boards'>Boards</a></h4>
+  <ul>
+      <li><a href='#boards-index'>index</a></li>
+      <li><a href='#boards-show'>show</a></li>
+      <li><a href='#boards-create'>create</a></li>
+      <li><a href='#boards-update'>update</a></li>
+      <li><a href='#boards-destroy'>destroy</a></li>
+      <li><a href='#boards-add_user'>add_user</a></li>
+      <li><a href='#boards-remove_user'>remove_user</a></li>
+  </ul>
+
+
+
+  <hr/>
+
+  <div>
+    <h2 id="authentication">
+      <a href='#authentication'>Authentication</a><br>
+      <small></small>
+    </h2>
+  </div>
+
+
+  <div>
+
+      <hr/>
+
+      <h3 id="authentication-create_token">
+      <a href='#authentication'>Authentication</a> / <a href='#authentication-create_token'>create_token</a>
+      </h3>
+
+      <div>
+          <h4>
+              POST /api/v1/auth/login
+            <br>
+            <small>Log in / get JWT token.</small>
+          </h4>
+      </div>
+
+      <div>
+        
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>user </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a Hash</p>
+ ]
+      </small>
+      
+<p>Request object</p>
+
+    </li>
+    <ul>
+    <li>
+      <strong>email </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>User email</p>
+
+    </li>
+    
+    <li>
+      <strong>password </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>User password</p>
+
+    </li>
+    
+</ul>
+
+</ul>
+
+      </div>
+      <hr/>
+
+      <h3 id="authentication-create_user">
+      <a href='#authentication'>Authentication</a> / <a href='#authentication-create_user'>create_user</a>
+      </h3>
+
+      <div>
+          <h4>
+              POST /api/v1/auth/register
+            <br>
+            <small>Create new user & get JWT token.</small>
+          </h4>
+      </div>
+
+      <div>
+        
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>user </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a Hash</p>
+ ]
+      </small>
+      
+<p>Request object</p>
+
+    </li>
+    <ul>
+    <li>
+      <strong>email </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>Unique user email</p>
+
+    </li>
+    
+    <li>
+      <strong>username </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>Unique username</p>
+
+    </li>
+    
+    <li>
+      <strong>password </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>User password</p>
+
+    </li>
+    
+    <li>
+      <strong>password_confirmation </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>User password confirmation</p>
+
+    </li>
+    
+</ul>
+
+</ul>
+
+      </div>
+  </div>
+
+  <hr/>
+
+  <div>
+    <h2 id="boards">
+      <a href='#boards'>Boards</a><br>
+      <small></small>
+    </h2>
+  </div>
+
+
+  <div>
+
+      <hr/>
+
+      <h3 id="boards-index">
+      <a href='#boards'>Boards</a> / <a href='#boards-index'>index</a>
+      </h3>
+
+      <div>
+          <h4>
+              GET /api/v1/boards
+            <br>
+            <small>JWT PROTECTED: Get all users boards</small>
+          </h4>
+      </div>
+
+      <div>
+        
+
+
+      </div>
+      <hr/>
+
+      <h3 id="boards-show">
+      <a href='#boards'>Boards</a> / <a href='#boards-show'>show</a>
+      </h3>
+
+      <div>
+          <h4>
+              GET /api/v1/boards/:id
+            <br>
+            <small>JWT PROTECTED: Get user board</small>
+          </h4>
+      </div>
+
+      <div>
+        
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>id </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>Board id</p>
+
+    </li>
+    
+</ul>
+
+      </div>
+      <hr/>
+
+      <h3 id="boards-create">
+      <a href='#boards'>Boards</a> / <a href='#boards-create'>create</a>
+      </h3>
+
+      <div>
+          <h4>
+              POST /api/v1/boards
+            <br>
+            <small>JWT PROTECTED: Create new board</small>
+          </h4>
+      </div>
+
+      <div>
+        
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>board </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a Hash</p>
+ ]
+      </small>
+      
+<p>Request object</p>
+
+    </li>
+    <ul>
+    <li>
+      <strong>name </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>Board name</p>
+
+    </li>
+    
+</ul>
+
+</ul>
+
+      </div>
+      <hr/>
+
+      <h3 id="boards-update">
+      <a href='#boards'>Boards</a> / <a href='#boards-update'>update</a>
+      </h3>
+
+      <div>
+          <h4>
+              PUT /api/v1/boards/:id
+            <br>
+            <small>JWT PROTECTED: Update board</small>
+          </h4>
+      </div>
+
+      <div>
+        
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>id </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>Board id</p>
+
+    </li>
+    
+    <li>
+      <strong>board </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a Hash</p>
+ ]
+      </small>
+      
+<p>Request object</p>
+
+    </li>
+    <ul>
+    <li>
+      <strong>name </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>Board name</p>
+
+    </li>
+    
+</ul>
+
+</ul>
+
+      </div>
+      <hr/>
+
+      <h3 id="boards-destroy">
+      <a href='#boards'>Boards</a> / <a href='#boards-destroy'>destroy</a>
+      </h3>
+
+      <div>
+          <h4>
+              DELETE /api/v1/boards/:id
+            <br>
+            <small>JWT PROTECTED: Delete board</small>
+          </h4>
+      </div>
+
+      <div>
+        
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>id </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>Board id</p>
+
+    </li>
+    
+</ul>
+
+      </div>
+      <hr/>
+
+      <h3 id="boards-add_user">
+      <a href='#boards'>Boards</a> / <a href='#boards-add_user'>add_user</a>
+      </h3>
+
+      <div>
+          <h4>
+              PUT /api/v1/boards/:id/add_user
+            <br>
+            <small>JWT PROTECTED: Add user to board</small>
+          </h4>
+      </div>
+
+      <div>
+        
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>id </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>Board id</p>
+
+    </li>
+    
+    <li>
+      <strong>user </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a Hash</p>
+ ]
+      </small>
+      
+<p>Request object</p>
+
+    </li>
+    <ul>
+    <li>
+      <strong>user_id </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>User id</p>
+
+    </li>
+    
+</ul>
+
+</ul>
+
+      </div>
+      <hr/>
+
+      <h3 id="boards-remove_user">
+      <a href='#boards'>Boards</a> / <a href='#boards-remove_user'>remove_user</a>
+      </h3>
+
+      <div>
+          <h4>
+              DELETE /api/v1/boards/:id/add_user
+            <br>
+            <small>JWT PROTECTED: Remove user from board</small>
+          </h4>
+      </div>
+
+      <div>
+        
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>id </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>Board id</p>
+
+    </li>
+    
+    <li>
+      <strong>user </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a Hash</p>
+ ]
+      </small>
+      
+<p>Request object</p>
+
+    </li>
+    <ul>
+    <li>
+      <strong>user_id </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>User id</p>
+
+    </li>
+    
+</ul>
+
+</ul>
+
+      </div>
+  </div>

@@ -35,6 +35,8 @@ gem "active_model_serializers", "~> 0.10.12"
 gem "olive_branch"
 # A ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT) standard
 gem "jwt"
+# Generate API docs
+gem "apipie-rails"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

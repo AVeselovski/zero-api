@@ -67,6 +67,8 @@ GEM
       zeitwerk (~> 2.3)
     acts_as_list (1.0.4)
       activerecord (>= 4.2)
+    apipie-rails (0.5.19)
+      rails (>= 4.1)
     bcrypt (3.1.16)
     bootsnap (1.9.1)
       msgpack (~> 1.0)
@@ -175,6 +177,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.12)
   acts_as_list
+  apipie-rails
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.4)
   byebug

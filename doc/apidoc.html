@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API documentation</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link type='text/css' rel='stylesheet' href='./apidoc/stylesheets/bundled/bootstrap.min.css'/>
+<link type='text/css' rel='stylesheet' href='./apidoc/stylesheets/bundled/prettify.css'/>
+<link type='text/css' rel='stylesheet' href='./apidoc/stylesheets/bundled/bootstrap-responsive.min.css'/>
+  <link type='text/css' rel='stylesheet' href='./apidoc/stylesheets/application.css'/>
+  <!-- IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div id='container'>
+        <ul class='breadcrumb'>
+  <li class='active'><a href='./apidoc.html'>ZeroApi v1</a></li>
+  
+</ul>
+
+<div>
+<p>Another API description</p>
+</div>
+
+<h1 class='page-header'>Resources</h1>
+
+  <h2>
+    <a href='./apidoc/authentication.html'>
+      Authentication
+    </a>
+    <br>
+    <small></small>
+  </h2>
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>Resource</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+          <tr>
+            <td>
+              <a href='./apidoc/authentication/create_token.html'>POST /api/v1/auth/login</a>
+            </td>
+            <td width='60%'>Log in / get JWT token.</td>
+          </tr>
+          <tr>
+            <td>
+              <a href='./apidoc/authentication/create_user.html'>POST /api/v1/auth/register</a>
+            </td>
+            <td width='60%'>Create new user &amp; get JWT token.</td>
+          </tr>
+    </tbody>
+  </table>
+  <h2>
+    <a href='./apidoc/boards.html'>
+      Boards
+    </a>
+    <br>
+    <small></small>
+  </h2>
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>Resource</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+          <tr>
+            <td>
+              <a href='./apidoc/boards/index.html'>GET /api/v1/boards</a>
+            </td>
+            <td width='60%'>JWT PROTECTED: Get all users boards</td>
+          </tr>
+          <tr>
+            <td>
+              <a href='./apidoc/boards/show.html'>GET /api/v1/boards/:id</a>
+            </td>
+            <td width='60%'>JWT PROTECTED: Get user board</td>
+          </tr>
+          <tr>
+            <td>
+              <a href='./apidoc/boards/create.html'>POST /api/v1/boards</a>
+            </td>
+            <td width='60%'>JWT PROTECTED: Create new board</td>
+          </tr>
+          <tr>
+            <td>
+              <a href='./apidoc/boards/update.html'>PUT /api/v1/boards/:id</a>
+            </td>
+            <td width='60%'>JWT PROTECTED: Update board</td>
+          </tr>
+          <tr>
+            <td>
+              <a href='./apidoc/boards/destroy.html'>DELETE /api/v1/boards/:id</a>
+            </td>
+            <td width='60%'>JWT PROTECTED: Delete board</td>
+          </tr>
+          <tr>
+            <td>
+              <a href='./apidoc/boards/add_user.html'>PUT /api/v1/boards/:id/add_user</a>
+            </td>
+            <td width='60%'>JWT PROTECTED: Add user to board</td>
+          </tr>
+          <tr>
+            <td>
+              <a href='./apidoc/boards/remove_user.html'>DELETE /api/v1/boards/:id/add_user</a>
+            </td>
+            <td width='60%'>JWT PROTECTED: Remove user from board</td>
+          </tr>
+    </tbody>
+  </table>
+
+
+        
+      </div>
+    </div>
+    <hr>
+    <footer></footer>
+  </div>
+  <script type='text/javascript' src='./apidoc/javascripts/bundled/jquery.js'></script>
+<script type='text/javascript' src='./apidoc/javascripts/bundled/bootstrap-collapse.js'></script>
+<script type='text/javascript' src='./apidoc/javascripts/bundled/prettify.js'></script>
+<script type='text/javascript' src='./apidoc/javascripts/apipie.js'></script>
+</body>
+</html>

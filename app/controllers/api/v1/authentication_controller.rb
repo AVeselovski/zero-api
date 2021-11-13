@@ -4,6 +4,11 @@ class Api::V1::AuthenticationController < ApiController
   skip_before_action :authenticate_token!
 
   # login
+  api :POST, "/v1/auth/login", "Log in / get JWT token."
+  param :user, Hash, "Request object", required: true do
+    param :email, String, "User email", required: true
+    param :password, String, "User password", required: true
+  end
   def create_token
     user = User.find_by(email: user_params[:email])
     if !user
@@ -18,6 +23,13 @@ class Api::V1::AuthenticationController < ApiController
   end
 
   # register
+  api :POST, "/v1/auth/register", "Create new user & get JWT token."
+  param :user, Hash, "Request object", required: true do
+    param :email, String, "Unique user email", required: true
+    param :username, String, "Unique username", required: true
+    param :password, String, "User password", required: true
+    param :password_confirmation, String, "User password confirmation", required: true
+  end
   def create_user
     existing_email = User.find_by(email: user_params[:email])
     existing_username = User.find_by(username: user_params[:username])

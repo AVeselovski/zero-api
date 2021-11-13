@@ -6,19 +6,23 @@ class Api::V1::BoardsController < ApiController
   end
   before_action :set_board, only: [:show, :update, :destroy, :add_user, :remove_user]
 
-  # GET /boards
+  api :GET, "/v1/boards", "JWT PROTECTED: Get all users boards"
   def index
     @boards = current_user.boards
 
     render json: @boards
   end
 
-  # GET /boards/1
+  api :GET, "/v1/boards/:id", "JWT PROTECTED: Get user board"
+  param :id, String, "Board id", required: true
   def show
     render json: @board
   end
 
-  # POST /boards
+  api :POST, "/v1/boards", "JWT PROTECTED: Create new board"
+  param :board, Hash, "Request object", required: true do
+    param :name, String, "Board name", required: true
+  end
   def create
     board = Board.new(board_params)
     board[:owner_id] = current_user[:id]
@@ -31,7 +35,11 @@ class Api::V1::BoardsController < ApiController
     end
   end
 
-  # PATCH/PUT /boards/1
+  api :PUT, "/v1/boards/:id", "JWT PROTECTED: Update board"
+  param :id, String, "Board id", required: true
+  param :board, Hash, "Request object", required: true do
+    param :name, String, "Board name", required: true
+  end
   def update
     if @board.update(board_params)
       render json: @board
@@ -40,12 +48,17 @@ class Api::V1::BoardsController < ApiController
     end
   end
 
-  # DELETE /boards/1
+  api :DELETE, "/v1/boards/:id", "JWT PROTECTED: Delete board"
+  param :id, String, "Board id", required: true
   def destroy
     @board.destroy
   end
 
-  # PUT /boards/1/add_user
+  api :PUT, "/v1/boards/:id/add_user", "JWT PROTECTED: Add user to board"
+  param :id, String, "Board id", required: true
+  param :user, Hash, "Request object", required: true do
+    param :user_id, String, "User id", required: true
+  end
   def add_user
     if current_user[:id] != @board[:owner_id]
       render json: { errors: ["Only the board owner can add/remove members!"] }, status: :forbidden
@@ -65,6 +78,11 @@ class Api::V1::BoardsController < ApiController
   end
 
   # DELETE /boards/1/remove_user
+  api :DELETE, "/v1/boards/:id/add_user", "JWT PROTECTED: Remove user from board"
+  param :id, String, "Board id", required: true
+  param :user, Hash, "Request object", required: true do
+    param :user_id, String, "User id", required: true
+  end
   def remove_user
     if current_user[:id] != @board[:owner_id]
       render json: { errors: ["Only the board owner can add/remove members!"] }, status: :forbidden
