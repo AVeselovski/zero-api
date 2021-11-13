@@ -32,5 +32,7 @@ class ApiController < ApplicationController
 
     def auth_token
       @auth_token ||= request.headers.fetch("Authorization", "").split(" ").last
+      "!!TOKEN!!"
+      puts @auth_token
     end
 end
