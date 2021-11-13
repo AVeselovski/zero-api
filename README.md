@@ -6,6 +6,8 @@ REST API for the ZeroCluster (placeholder name).
 
 Rails and Docker must be installed. Project uses Dockerized PostgreSQL as a local development & testing database. Assuming project has dependencies installed (`bundle install`):
 
+Create git ignored `config/local_env.yml` with `JWT_SECRET_KEY: "Secret key here"`.
+
 First terminal window:
 
 - `docker-compose up`

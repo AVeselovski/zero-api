@@ -15,8 +15,6 @@ class ApiController < ApplicationController
   private
     def authenticate_token!
       payload = JsonWebToken.decode(auth_token)
-      puts "!PAYLOAD!"
-      puts payload
       if payload.present?
         @current_user = User.find(payload["sub"])
       else
@@ -27,12 +25,12 @@ class ApiController < ApplicationController
     rescue JWT::ExpiredSignature
       render json: { errors: ["Expired token!"] }, status: :unauthorized
     rescue JWT::DecodeError
+      puts "DECODE_ERROR"
+      puts ENV["JWT_SECRET_KEY"]
       render json: { errors: ["Invalid authentication token!"] }, status: :unauthorized
     end
 
     def auth_token
       @auth_token ||= request.headers.fetch("Authorization", "").split(" ").last
-      "!!TOKEN!!"
-      puts @auth_token
     end
 end
