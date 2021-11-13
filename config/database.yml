@@ -3,18 +3,22 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
+
+development:
+  <<: *default
+  database: zero_api_development
   # This must match what POSTGRES_USER was set to in docker-compose.yml.
   username: zero_api
   # This must be 127.0.0.1 and not localhost.
   host: 127.0.0.1
 
-development:
-  <<: *default
-  database: zero_api_development
-
 test:
   <<: *default
   database: zero_api_test
+  # This must match what POSTGRES_USER was set to in docker-compose.yml.
+  username: zero_api
+  # This must be 127.0.0.1 and not localhost.
+  host: 127.0.0.1
 
 production:
   <<: *default
