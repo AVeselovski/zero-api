@@ -1,0 +1,31 @@
+# docker-compose.yml
+---
+version: "3.8"
+services:
+  # Arbitrary name.
+  postgres:
+    image: postgres:14.1-alpine
+
+    # PostgreSQL has to put its data somewhere. Here
+    # we're saying to put the data in /var/lib/postgresql/data.
+    # The "delegated" part specifies the strategy for
+    # syncing the container's data with our host machine.
+    # (Another option would be "cached".)
+    volumes:
+      - postgresql:/var/lib/postgresql/data:delegated
+
+    # Make PostgreSQL service available on port 5432.
+    ports:
+      - "127.0.0.1:5432:5432"
+
+    # Environment variables on Docker container.
+    environment:
+      # PostgreSQL username.
+      POSTGRES_USER: zero_api
+
+      # Allow passwordless authentication.
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+volumes:
+  postgresql:
+  storage:

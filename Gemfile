@@ -9,6 +9,8 @@ ruby "2.7.1"
 gem "rails", "~> 6.1.3", ">= 6.1.3.1"
 # Use Puma as the app server
 gem "puma", "~> 5.0"
+# Use Postgres as the database for Active Record
+gem "pg"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
@@ -23,7 +25,7 @@ gem "bcrypt", "~> 3.1.7"
 gem "bootsnap", ">= 1.4.4", require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem 'rack-cors'
+gem "rack-cors"
 
 # for easy sorting/repositioning of items
 gem "acts_as_list"
@@ -39,8 +41,6 @@ group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
   # Pretty Rails console output
   gem "hirb", "~> 0.7.3"
-  # Use sqlite3 as the database for Active Record
-  gem "sqlite3", "~> 1.4"
 end
 
 group :development do
@@ -51,11 +51,6 @@ end
 
 group :test do
   gem "simplecov"
-end
-
-group :production do
-  # Use Postgres as the database for Active Record
-  gem "pg"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
