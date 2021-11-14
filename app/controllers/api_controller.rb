@@ -6,6 +6,11 @@ class ApiController < ApplicationController
   # skip_before_action :verify_authenticity_token
   before_action :authenticate_token!
 
+  # ParamError is superclass of ParamMissing, ParamInvalid
+  rescue_from Apipie::ParamError do |e|
+    render json: { errors: [e.message] }, status: :unprocessable_entity
+  end
+
   def require_board_user(board_id)
     _board = current_user.boards.find(board_id)
   rescue ActiveRecord::RecordNotFound

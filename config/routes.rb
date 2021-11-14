@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get "/" => redirect("/docs")
+  get "/api" => redirect("/docs")
   apipie
+
   namespace :api do
     namespace :v1 do
       post "auth/login", to: "authentication#create_token"

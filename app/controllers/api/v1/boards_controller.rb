@@ -6,23 +6,38 @@ class Api::V1::BoardsController < ApiController
   end
   before_action :set_board, only: [:show, :update, :destroy, :add_user, :remove_user]
 
-  api :GET, "/v1/boards", "JWT PROTECTED: Get all users boards"
+  invalid_token = '"Invalid authentication token! / Expired token!" - User in not loggen in'
+  no_access = '"No access!" - User has no access to a resource / resource doesn\'t exist'
+  param_error = "Invalid parameters. Apipie errors"
+
+  api :GET, "/v1/boards", "JWT REQUIRED: Get all users boards"
+  formats ["json"]
+  example " 200: [{ 'id': 1, 'name': 'Board name', 'ownerId': 1, 'lists': [], 'users': [...] }, {...}] "
+  error code: 401, desc: invalid_token
   def index
     @boards = current_user.boards
-
     render json: @boards
   end
 
-  api :GET, "/v1/boards/:id", "JWT PROTECTED: Get user board"
+  api :GET, "/v1/boards/:id", "JWT REQUIRED: Get user board"
+  formats ["json"]
   param :id, String, "Board id", required: true
+  example " 200: { 'id': 1, 'name': 'Board name', 'ownerId': 1, 'lists': [], 'users': [...] } "
+  error code: 401, desc: invalid_token
+  error code: 403, desc: no_access
   def show
     render json: @board
   end
 
-  api :POST, "/v1/boards", "JWT PROTECTED: Create new board"
-  param :board, Hash, "Request object", required: true do
+  api :POST, "/v1/boards", "JWT REQUIRED: Create new board"
+  formats ["json"]
+  param :board, Hash, "Request {}", required: true do
     param :name, String, "Board name", required: true
   end
+  example " REQUEST JSON: { 'name': 'Board name' } "
+  example " 201: { 'id': 1, 'name': 'Board name', 'ownerId': 1, 'lists': [], 'users': [...] } "
+  error code: 401, desc: invalid_token
+  error code: 422, desc: param_error
   def create
     board = Board.new(board_params)
     board[:owner_id] = current_user[:id]
@@ -35,11 +50,17 @@ class Api::V1::BoardsController < ApiController
     end
   end
 
-  api :PUT, "/v1/boards/:id", "JWT PROTECTED: Update board"
+  api :PUT, "/v1/boards/:id", "JWT REQUIRED: Update board"
+  formats ["json"]
   param :id, String, "Board id", required: true
-  param :board, Hash, "Request object", required: true do
+  param :board, Hash, "Request {}", required: true do
     param :name, String, "Board name", required: true
   end
+  example " REQUEST JSON: { 'name': 'Updated board name' } "
+  example " 200: { 'id': 1, 'name': 'Updated board name', 'ownerId': 1, 'lists': [], 'users': [...] } "
+  error code: 401, desc: invalid_token
+  error code: 403, desc: no_access
+  error code: 422, desc: param_error
   def update
     if @board.update(board_params)
       render json: @board
@@ -48,17 +69,27 @@ class Api::V1::BoardsController < ApiController
     end
   end
 
-  api :DELETE, "/v1/boards/:id", "JWT PROTECTED: Delete board"
+  api :DELETE, "/v1/boards/:id", "JWT REQUIRED: Delete board"
+  formats ["json"]
   param :id, String, "Board id", required: true
+  example " 204: no content "
+  error code: 401, desc: invalid_token
+  error code: 403, desc: no_access
   def destroy
     @board.destroy
   end
 
-  api :PUT, "/v1/boards/:id/add_user", "JWT PROTECTED: Add user to board"
+  api :PUT, "/v1/boards/:id/add_user", "JWT REQUIRED: Add user to board"
+  formats ["json"]
   param :id, String, "Board id", required: true
-  param :user, Hash, "Request object", required: true do
-    param :user_id, String, "User id", required: true
-  end
+  param :user_id, :number, "User id", required: true
+  example " REQUEST JSON: { 'userId': 2 } "
+  example " 200: { 'id': 1, 'name': 'Board name', 'ownerId': 1, 'lists': [], 'users': [...] } "
+  error code: 401, desc: invalid_token
+  error code: 403, desc: '"Only the board owner can add/remove members!"'
+  error code: 404, desc: '"User doesn\'t exist!"'
+  error code: 422, desc: param_error
+  error code: 422, desc: '"User is already a member!"'
   def add_user
     if current_user[:id] != @board[:owner_id]
       render json: { errors: ["Only the board owner can add/remove members!"] }, status: :forbidden
@@ -71,18 +102,27 @@ class Api::V1::BoardsController < ApiController
       return
     end
 
-    new_user = User.find(params[:user_id])
+    new_user = User.find_by(id: params[:user_id])
+    if !new_user
+      render json: { errors: ["User doesn't exist!"] }, status: :not_found
+      return
+    end
+
     @board.users << new_user
-
-    render json: @board, status: :created
+    render json: @board, status: :ok
   end
 
-  # DELETE /boards/1/remove_user
-  api :DELETE, "/v1/boards/:id/add_user", "JWT PROTECTED: Remove user from board"
+  api :DELETE, "/v1/boards/:id/add_user", "JWT REQUIRED: Remove user from board"
+  formats ["json"]
   param :id, String, "Board id", required: true
-  param :user, Hash, "Request object", required: true do
-    param :user_id, String, "User id", required: true
-  end
+  param :user_id, :number, "User id", required: true
+  example " REQUEST JSON: { 'userId': 2 } "
+  example " 200: { 'id': 1, 'name': 'Board name', 'ownerId': 1, 'lists': [], 'users': [...] } "
+  error code: 401, desc: invalid_token
+  error code: 403, desc: '"Only the board owner can add/remove members!"'
+  error code: 404, desc: '"User doesn\'t exist!"'
+  error code: 422, desc: param_error
+  error code: 422, desc: '"Cannot remove the only member, try archiving the board!"'
   def remove_user
     if current_user[:id] != @board[:owner_id]
       render json: { errors: ["Only the board owner can add/remove members!"] }, status: :forbidden
@@ -108,9 +148,13 @@ class Api::V1::BoardsController < ApiController
       end
     end
 
-    removed_user = User.find(params[:user_id])
-    @board.users.delete(removed_user)
+    removed_user = User.find_by(id: params[:user_id])
+    if !removed_user
+      render json: { errors: ["User doesn't exist!"] }, status: :not_found
+      return
+    end
 
+    @board.users.delete(removed_user)
     render json: @board, status: :ok
   end
 

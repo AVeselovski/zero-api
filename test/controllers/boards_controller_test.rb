@@ -81,7 +81,7 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
         as: :json
 
     assert @board.users.count == 2
-    assert_response 201
+    assert_response 200
   end
 
   test "should not add already added users to board" do

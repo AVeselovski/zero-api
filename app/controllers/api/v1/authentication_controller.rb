@@ -3,12 +3,17 @@
 class Api::V1::AuthenticationController < ApiController
   skip_before_action :authenticate_token!
 
-  # login
+  invalid_credentials = '"Invalid username or password!"'
+  param_error = "Invalid parameters. Apipie errors"
+
   api :POST, "/v1/auth/login", "Log in / get JWT token."
-  param :user, Hash, "Request object", required: true do
-    param :email, String, "User email", required: true
-    param :password, String, "User password", required: true
-  end
+  formats ["json"]
+  param :email, String, "User email", required: true
+  param :password, String, "User password", required: true
+  example " REQUEST JSON: { 'email': 'example@test.com', 'password': 'password' } "
+  example " 200: { 'token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIsImV4cCI6MTYzN...' } "
+  error code: 401, desc: invalid_credentials
+  error code: 422, desc: param_error
   def create_token
     user = User.find_by(email: user_params[:email])
     if !user
@@ -22,14 +27,24 @@ class Api::V1::AuthenticationController < ApiController
     end
   end
 
-  # register
   api :POST, "/v1/auth/register", "Create new user & get JWT token."
-  param :user, Hash, "Request object", required: true do
-    param :email, String, "Unique user email", required: true
-    param :username, String, "Unique username", required: true
-    param :password, String, "User password", required: true
-    param :password_confirmation, String, "User password confirmation", required: true
-  end
+  formats ["json"]
+  param :email, String, "Unique user email", required: true
+  param :username, String, "Unique username", required: true
+  param :password, String, "User password", required: true
+  param :password_confirmation, String, "User password confirmation", required: true
+  example "
+    REQUEST JSON: {
+      'email': 'example@test.com',
+      'username': 'Example',
+      'password': 'password',
+      'passwordConfirmation': 'password'
+    } "
+  example " 201: { 'token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIsImV4cCI6MTYzN...' } "
+  error code: 400, desc: "Email and / or username already taken!"
+  error code: 400, desc: "Password mismatch!"
+  error code: 401, desc: invalid_credentials
+  error code: 422, desc: param_error
   def create_user
     existing_email = User.find_by(email: user_params[:email])
     existing_username = User.find_by(username: user_params[:username])
