@@ -2,7 +2,11 @@
 
 REST API for the ZeroCluster (placeholder name).
 
-## Setup
+## Docs
+
+https://zero-cluster-api.herokuapp.com/docs
+
+## Development setup
 
 Rails and Docker must be installed. Project uses Dockerized PostgreSQL as a local development & testing database. Assuming project has dependencies installed (`bundle install`):
 
