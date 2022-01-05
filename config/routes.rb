@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       post "auth/login", to: "authentication#create_token"
       post "auth/register", to: "authentication#create_user"
 
+      get "me", to: "users#get_user"
+
       resources :boards do
         member do
           put :add_user

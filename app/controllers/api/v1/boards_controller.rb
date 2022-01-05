@@ -6,14 +6,17 @@ class Api::V1::BoardsController < ApiController
   end
   before_action :set_board, only: [:show, :update, :destroy, :add_user, :remove_user]
 
-  invalid_token = '"Invalid authentication token! / Expired token!" - User in not loggen in'
-  no_access = '"No access!" - User has no access to a resource / resource doesn\'t exist'
-  param_error = "Invalid parameters. Apipie errors"
+  BOARD_ERROR_MESSAGES = { 
+    not_owner: "Only the board owner can add/remove members!",
+    no_user: "User doesn\'t exist!",
+    is_member: "User is already a member!",
+    cannot_remove: "Cannot remove the only member, try archiving the board!"
+  }
 
   api :GET, "/v1/boards", "JWT REQUIRED: Get all users boards"
   formats ["json"]
   example " 200: [{ 'id': 1, 'name': 'Board name', 'ownerId': 1, 'lists': [], 'users': [...] }, {...}] "
-  error code: 401, desc: invalid_token
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
   def index
     @boards = current_user.boards
     render json: @boards
@@ -23,8 +26,8 @@ class Api::V1::BoardsController < ApiController
   formats ["json"]
   param :id, String, "Board id", required: true
   example " 200: { 'id': 1, 'name': 'Board name', 'ownerId': 1, 'lists': [], 'users': [...] } "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: no_access
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
   def show
     render json: @board
   end
@@ -36,8 +39,8 @@ class Api::V1::BoardsController < ApiController
   end
   example " REQUEST JSON: { 'name': 'Board name' } "
   example " 201: { 'id': 1, 'name': 'Board name', 'ownerId': 1, 'lists': [], 'users': [...] } "
-  error code: 401, desc: invalid_token
-  error code: 422, desc: param_error
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 422, desc: ERROR_MESSAGES[:param_error]
   def create
     board = Board.new(board_params)
     board[:owner_id] = current_user[:id]
@@ -58,9 +61,9 @@ class Api::V1::BoardsController < ApiController
   end
   example " REQUEST JSON: { 'name': 'Updated board name' } "
   example " 200: { 'id': 1, 'name': 'Updated board name', 'ownerId': 1, 'lists': [], 'users': [...] } "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: no_access
-  error code: 422, desc: param_error
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
+  error code: 422, desc: ERROR_MESSAGES[:param_error]
   def update
     if @board.update(board_params)
       render json: @board
@@ -73,8 +76,8 @@ class Api::V1::BoardsController < ApiController
   formats ["json"]
   param :id, String, "Board id", required: true
   example " 204: no content "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: no_access
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
   def destroy
     @board.destroy
   end
@@ -85,26 +88,26 @@ class Api::V1::BoardsController < ApiController
   param :user_id, :number, "User id", required: true
   example " REQUEST JSON: { 'userId': 2 } "
   example " 200: { 'id': 1, 'name': 'Board name', 'ownerId': 1, 'lists': [], 'users': [...] } "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: '"Only the board owner can add/remove members!"'
-  error code: 404, desc: '"User doesn\'t exist!"'
-  error code: 422, desc: param_error
-  error code: 422, desc: '"User is already a member!"'
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: BOARD_ERROR_MESSAGES[:not_owner]
+  error code: 404, desc: BOARD_ERROR_MESSAGES[:no_user]
+  error code: 422, desc: ERROR_MESSAGES[:param_error]
+  error code: 422, desc: BOARD_ERROR_MESSAGES[:is_member]
   def add_user
     if current_user[:id] != @board[:owner_id]
-      render json: { errors: ["Only the board owner can add/remove members!"] }, status: :forbidden
+      render json: { errors: [BOARD_ERROR_MESSAGES[:not_owner]] }, status: :forbidden
       return
     end
 
     user_exists = @board.users.exists?(params[:user_id])
     if user_exists
-      render json: { errors: ["User is already a member!"] }, status: :unprocessable_entity
+      render json: { errors: [BOARD_ERROR_MESSAGES[:is_member]] }, status: :unprocessable_entity
       return
     end
 
     new_user = User.find_by(id: params[:user_id])
     if !new_user
-      render json: { errors: ["User doesn't exist!"] }, status: :not_found
+      render json: { errors: [BOARD_ERROR_MESSAGES[:no_user]] }, status: :not_found
       return
     end
 
@@ -118,19 +121,19 @@ class Api::V1::BoardsController < ApiController
   param :user_id, :number, "User id", required: true
   example " REQUEST JSON: { 'userId': 2 } "
   example " 200: { 'id': 1, 'name': 'Board name', 'ownerId': 1, 'lists': [], 'users': [...] } "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: '"Only the board owner can add/remove members!"'
-  error code: 404, desc: '"User doesn\'t exist!"'
-  error code: 422, desc: param_error
-  error code: 422, desc: '"Cannot remove the only member, try archiving the board!"'
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: BOARD_ERROR_MESSAGES[:not_owner]
+  error code: 404, desc: BOARD_ERROR_MESSAGES[:no_user]
+  error code: 422, desc: ERROR_MESSAGES[:param_error]
+  error code: 422, desc: BOARD_ERROR_MESSAGES[:cannot_remove]
   def remove_user
     if current_user[:id] != @board[:owner_id]
-      render json: { errors: ["Only the board owner can add/remove members!"] }, status: :forbidden
+      render json: { errors: [BOARD_ERROR_MESSAGES[:not_owner]] }, status: :forbidden
       return
     end
 
     if @board.users.count == 1
-      render json: { errors: ["Cannot remove the only member, try archiving the board!"] }, status: :unprocessable_entity
+      render json: { errors: [BOARD_ERROR_MESSAGES[:cannot_remove]] }, status: :unprocessable_entity
       return
     end
 
@@ -150,7 +153,7 @@ class Api::V1::BoardsController < ApiController
 
     removed_user = User.find_by(id: params[:user_id])
     if !removed_user
-      render json: { errors: ["User doesn't exist!"] }, status: :not_found
+      render json: { errors: [BOARD_ERROR_MESSAGES[:no_user]] }, status: :not_found
       return
     end
 

@@ -7,18 +7,13 @@ class Api::V1::CardsController < ApiController
   before_action :set_list
   before_action :set_card, only: [:show, :update, :destroy, :move]
 
-  invalid_token = '"Invalid authentication token!" - User in not loggen in'
-  no_access = '"No access!" - User has no access to a resource / resource doesn\'t exist'
-  not_found = "Not found"
-  param_error = "Invalid parameters. Apipie errors"
-
   api :GET, "/v1/boards/:board_id/lists/:list_id/cards", "JWT REQUIRED: Get all list cards"
   formats ["json"]
   param :board_id, String, "Board id", required: true
   param :list_id, String, "List id", required: true
   example " 200: [{ 'id': 1, 'name': 'Card name', 'position': 1, 'listId': 1, 'list': {...} }, {...}] "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: no_access
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
   def index
     @cards = @list.cards
 
@@ -31,9 +26,9 @@ class Api::V1::CardsController < ApiController
   param :list_id, String, "List id", required: true
   param :id, String, "Card id", required: true
   example " 200: { 'id': 1, 'name': 'Card name', 'position': 1, 'listId': 1, 'list': {...} } "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: no_access
-  error code: 404, desc: not_found
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
+  error code: 404, desc: ERROR_MESSAGES[:not_found]
   def show
     render json: @card
   end
@@ -47,9 +42,9 @@ class Api::V1::CardsController < ApiController
   end
   example " REQUEST JSON: { 'name': 'Card name' } "
   example " 201: { 'id': 1, 'name': 'Card name', 'position': 1, 'listId': 1, 'list': {...} } "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: no_access
-  error code: 422, desc: param_error
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
+  error code: 422, desc: ERROR_MESSAGES[:param_error]
   def create
     @card = @list.cards.build(card_params)
 
@@ -71,10 +66,10 @@ class Api::V1::CardsController < ApiController
   end
   example " REQUEST JSON: { 'name': 'Updated card name' } "
   example " 200: { 'id': 1, 'name': 'Updated card name', 'position': 1, 'listId': 1, 'list': {...} } "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: no_access
-  error code: 404, desc: not_found
-  error code: 422, desc: param_error
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
+  error code: 404, desc: ERROR_MESSAGES[:not_found]
+  error code: 422, desc: ERROR_MESSAGES[:param_error]
   def update
     if @card.update(card_params)
       render json: @card
@@ -89,9 +84,9 @@ class Api::V1::CardsController < ApiController
   param :list_id, String, "List id", required: true
   param :id, String, "Card id", required: true
   example " 204: no content "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: no_access
-  error code: 404, desc: not_found
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
+  error code: 404, desc: ERROR_MESSAGES[:not_found]
   def destroy
     @card.destroy
   end
@@ -106,10 +101,10 @@ class Api::V1::CardsController < ApiController
   end
   example " REQUEST JSON: { 'position': 2 } "
   example " 200: { 'id': 1, 'name': 'Card name', 'position': 2, 'listId': 1, 'list': {...} } "
-  error code: 401, desc: invalid_token
-  error code: 403, desc: no_access
-  error code: 404, desc: not_found
-  error code: 422, desc: param_error
+  error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
+  error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
+  error code: 404, desc: ERROR_MESSAGES[:not_found]
+  error code: 422, desc: ERROR_MESSAGES[:param_error]
   def move
     @card.update(card_params)
 
