@@ -99,7 +99,7 @@ class Api::V1::CardsController < ApiController
   param :card, Hash, "Request {}", required: true do
     param :position, :number, "Position index", required: true
   end
-  example " REQUEST JSON: { 'position': 2 } "
+  example " REQUEST JSON: { 'position': 2, 'listId': 3 } "
   example " 200: { 'id': 1, 'name': 'Card name', 'position': 2, 'listId': 1, 'list': {...} } "
   error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
   error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
@@ -122,6 +122,6 @@ class Api::V1::CardsController < ApiController
 
     # Only allow a list of trusted parameters through.
     def card_params
-      params.require(:card).permit(:name, :position, :list_id)
+      params.require(:card).permit(:name, :body, :position, :list_id)
     end
 end

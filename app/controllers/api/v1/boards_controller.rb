@@ -6,7 +6,7 @@ class Api::V1::BoardsController < ApiController
   end
   before_action :set_board, only: [:show, :update, :destroy, :add_user, :remove_user]
 
-  BOARD_ERROR_MESSAGES = { 
+  BOARD_ERROR_MESSAGES = {
     not_owner: "Only the board owner can add/remove members!",
     no_user: "User doesn\'t exist!",
     is_member: "User is already a member!",
@@ -29,7 +29,8 @@ class Api::V1::BoardsController < ApiController
   error code: 401, desc: ERROR_MESSAGES[:apipie_invalid_token]
   error code: 403, desc: ERROR_MESSAGES[:apipie_no_access]
   def show
-    render json: @board
+    # include 2 first levels of serialized nested values (note: ** would cause infinite loop)
+    render json: @board, include: "*.*"
   end
 
   api :POST, "/v1/boards", "JWT REQUIRED: Create new board"
